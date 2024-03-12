@@ -1,0 +1,121 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                              Fake out strategy.mq5|
+//|                        Copyright 2021, Forex Robot Easy Team     |
+//|                              https://www.forexroboteasy.com       |
+//+------------------------------------------------------------------+
+
+// Global variables
+input int TradeHoursStart = 0;  // Trading start hour
+input int TradeHoursEnd = 23;   // Trading end hour
+input double TrailingStopPercent = 0.5; // Trailing stop percentage
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Set allowed trading hours
+    if(!SetTradeHours(TradeHoursStart, TradeHoursEnd))
+    {
+        Print('Failed to set trading hours!');
+        return INIT_FAILED;
+    }
+    
+    // Set trailing stop
+    if(!SetTrailingStop(TrailingStopPercent))
+    {
+        Print('Failed to set trailing stop!');
+        return INIT_FAILED;
+    }
+    
+    return INIT_SUCCEEDED;
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    // Perform any necessary cleanup or final operations
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Collect real-time data and perform analysis
+    double currentPrice = MarketInfo(Symbol(), MODE_BID);
+    double previousPrice = iClose(Symbol(), 0, 1);
+    
+    // Check for Fake Out pattern
+    if(IsFakeOutPattern(currentPrice, previousPrice))
+    {
+        // Place order based on identified opportunity
+        if(BuySignal())
+        {
+            if(!OrderSend(Symbol(), OP_BUY, 0.1, currentPrice, 3, 0, 0, 'Buy order', 0, 0, Green))
+            {
+                Print('Failed to send buy order!');
+            }
+        }
+        else if(SellSignal())
+        {
+            if(!OrderSend(Symbol(), OP_SELL, 0.1, currentPrice, 3, 0, 0, 'Sell order', 0, 0, Red))
+            {
+                Print('Failed to send sell order!');
+            }
+        }
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Check if Fake Out pattern is present                              |
+//+------------------------------------------------------------------+
+bool IsFakeOutPattern(const double currentPrice, const double previousPrice)
+{
+    // Add logic to identify the Fake Out pattern
+    // Return true if pattern is present, false otherwise
+    return false;
+}
+
+//+------------------------------------------------------------------+
+//| Determine buy signal based on indicators or conditions            |
+//+------------------------------------------------------------------+
+bool BuySignal()
+{
+    // Add logic to determine buy signal
+    // Return true if buy signal is present, false otherwise
+    return false;
+}
+
+//+------------------------------------------------------------------+
+//| Determine sell signal based on indicators or conditions           |
+//+------------------------------------------------------------------+
+bool SellSignal()
+{
+    // Add logic to determine sell signal
+    // Return true if sell signal is present, false otherwise
+    return false;
+}
+
+//+------------------------------------------------------------------+
+//| Set allowed trading hours                                        |
+//+------------------------------------------------------------------+
+bool SetTradeHours(const int startHour, const int endHour)
+{
+    // Add logic to set allowed trading hours
+    // Return true if successful, false otherwise
+    return true;
+}
+
+//+------------------------------------------------------------------+
+//| Set trailing stop                                                 |
+//+------------------------------------------------------------------+
+bool SetTrailingStop(const double percent)
+{
+    // Add logic to set trailing stop
+    // Return true if successful, false otherwise
+    return true;
+}
